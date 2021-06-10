@@ -1,0 +1,23 @@
+.kontejner{
+    background-color:red;
+    border: solid black 5px;
+    width:400px;
+    margin: 0 auto;
+    background-color: #4a8dc3;
+    color:white;
+  }
+  p{
+    text-align:center;
+    width: 100%;
+  }
+  .dole{
+    margin-top:100px;
+    overflow:auto;
+  }
+  .float{
+    float:left;
+    height:100px;
+    width:100px;
+    background-color:rgb(53, 104, 199);
+    margin:0 10px;
+  }
