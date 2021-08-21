@@ -32,25 +32,25 @@ public class ProizvodjacRestController {
 	private ProizvodjacRepository proizvodjacRepository;
 	
 	@GetMapping("proizvodjac")
-	@ApiOperation(value = "Vraća kolekciju svih proizvodjaca iz baze podataka")
+	@ApiOperation(value = "VraÄ‡a kolekciju svih proizvodjaca iz baze podataka")
 	public Collection<Proizvodjac> getProizvodjaci() {
 		return proizvodjacRepository.findAll();
 	}
 	
 	@GetMapping("proizvodjac/{id}")
-	@ApiOperation(value = "Vraća proizvođaca iz baze podataka čiji je id vrednost prosleđena kao path varijabla")
+	@ApiOperation(value = "VraÄ‡a proizvoÄ‘aca iz baze podataka Ä�iji je id vrednost prosleÄ‘ena kao path varijabla")
 	public Proizvodjac getProizvodjac(@PathVariable("id") Integer id) {
 		return proizvodjacRepository.getOne(id);
 	}
 	
 	@GetMapping("proizvodjacNaziv/{naziv}")
-	@ApiOperation(value = "Vraća kolekciju svih proizvođaca iz baze podataka koji u nazivu sadrže string prosleđen kao path varijabla")
+	@ApiOperation(value = "VraÄ‡a kolekciju svih proizvoÄ‘aca iz baze podataka koji u nazivu sadrÅ¾e string prosleÄ‘en kao path varijabla")
 	public Collection<Proizvodjac> getProizvodjacByNaziv(@PathVariable("naziv") String naziv) {
 		return proizvodjacRepository.findByNazivContainingIgnoreCase(naziv);
 	}
 	
 	@PostMapping("proizvodjac")
-	@ApiOperation(value = "Upisuje proizvođaca u bazu podataka")
+	@ApiOperation(value = "Upisuje proizvoÄ‘aca u bazu podataka")
 	public ResponseEntity<Proizvodjac> insertProizvodjac(@RequestBody Proizvodjac proizvodjac) {
 		if(!proizvodjacRepository.existsById(proizvodjac.getId())) {
 			proizvodjacRepository.save(proizvodjac);
@@ -60,7 +60,7 @@ public class ProizvodjacRestController {
 	}
 	
 	@PutMapping("proizvodjac")
-	@ApiOperation(value = "Modifikuje postojeceg proizvođaca u bazi podataka")
+	@ApiOperation(value = "Modifikuje postojeceg proizvoÄ‘aca u bazi podataka")
 	public ResponseEntity<Proizvodjac> updateProizvodjac(@RequestBody Proizvodjac proizvodjac) {
 		if(!proizvodjacRepository.existsById(proizvodjac.getId())) 
 		{
@@ -72,11 +72,12 @@ public class ProizvodjacRestController {
 	}
 	
 	@DeleteMapping("proizvodjac/{id}")
-	@ApiOperation(value = "Briše proizvođaca iz baze podataka čija je id vrednost prosleđena kao path varijabla")
+	@ApiOperation(value = "BriÅ¡e proizvoÄ‘aca iz baze podataka Ä�ija je id vrednost prosleÄ‘ena kao path varijabla")
 	public ResponseEntity<Proizvodjac> deleteProizvodjac(@PathVariable("id") Integer id) {
 		if(!proizvodjacRepository.existsById(id)) {
 			return new ResponseEntity<Proizvodjac>(HttpStatus.NO_CONTENT);
 		}
+		jdbcTemplate.execute("delete from stavka_racuna where proizvod in (select id from proizvod where proizvodjac = " +id+ ")");
 		jdbcTemplate.execute("delete from proizvod where proizvodjac = " + id);
 		proizvodjacRepository.deleteById(id);
 		if(id == -100) 
